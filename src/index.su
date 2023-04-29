@@ -2,7 +2,7 @@
 This file sets up an HTTP server and serves a set of routes
 """
 
-@interfaces Routes from "./interfaces.su"
+@interfaces Route from "./interfaces.su"
 
 RestApi {
 
