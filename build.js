@@ -11,7 +11,7 @@ async function fetchFromOpenAI(system, prompt, previousMessages = []) {
     let result = '';
     try {
         const response = await openai.createChatCompletion({
-            model: "gpt-4",
+            model: "gpt-3.5-turbo",
             messages: [
                 {role: 'system', content: system},
                 ...previousMessages.map(({author, message}) => ({role: author, content: message})),
