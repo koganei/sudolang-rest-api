@@ -1,0 +1,19 @@
+"""
+This file exports a function getRoutes which will return a static array of routes to be imported by another file and added to Express
+"""
+
+@interfaces Route from "./interfaces.su"
+
+getRoutes(): Array of Routes {
+    [
+        Route {
+            path: /black
+            returns the string "black"
+        }
+
+        Route {
+            path: /white
+            returns the string "white"
+        }
+    ]
+}

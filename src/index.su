@@ -1,0 +1,17 @@
+"""
+This file sets up an Express server and serves a set of routes
+"""
+
+@interfaces Routes from "./interfaces.su"
+
+RestApi {
+
+    if JavaScript: import express
+    if Python: import flask
+
+    Route('/cats') {
+        The "cat-routes" file exports a function getRoutes()
+        It returns an array of routes, each of which is defined using the Routes interface.
+        This route should loop through the array and add each route from getRoutes as a separate subroute
+    }
+}

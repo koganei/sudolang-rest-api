@@ -1,0 +1,150 @@
+"""
+This file describes a build system for compile code from Sudolang to JavaScript or Python.
+"""
+
+OpenAI API Examples {
+    * ```js
+    const {Configuration, OpenAIApi} = require("openai");
+
+    const configuration = new Configuration({
+        apiKey: dotenv('openai_apikey'),
+    });
+    const openai = new OpenAIApi(configuration);
+
+    async function fetchFromOpenAI(system, prompt, previousMessages = []) {
+        let result = '';
+        try {
+            const response = await openai.createChatCompletion({
+                model: "gpt-3.5-turbo",
+                messages: [
+                    {role: 'system', content: system},
+                    ...previousMessages.map(({author, message}) => ({role: author, content: message})),
+                    {role: 'user', content: prompt},
+                ],
+                max_tokens: 500,
+                temperature: 0.5,
+            });
+            
+            result = response.data.choices[0].message.content.trim();
+            return result;
+        } catch(e) {
+            console.log('Could not connect to OpenAI', e.message);
+        }
+        console.log('got result', {result});
+        return result;
+    }
+    ```
+
+    * ```python
+    import openai;
+
+    def openai_request(
+        url: str,
+        headers: Dict,
+        payload: Dict,
+        timeout: Union[float, Tuple[float, float]] = OPENAI_TIMEOUT,
+        read_response: Optional[bool] = True,
+        **kwargs,
+    ):
+        """Make a request to the OpenAI API given a `url`, `headers`, `payload`, and `timeout`.
+
+        :param url: The URL of the OpenAI API.
+        :param headers: Dictionary of HTTP Headers to send with the :class:`Request`.
+        :param payload: The payload to send with the request.
+        :param timeout: The timeout length of the request. The default is 30s.
+        :param read_response: Whether to read the response as JSON. The default is True.
+        """
+        response = requests.request("POST", url, headers=headers, data=json.dumps(payload), timeout=timeout, **kwargs)
+        if read_response:
+            json_response = json.loads(response.text)
+
+        if response.status_code != 200:
+            openai_error: OpenAIError
+            if response.status_code == 429:
+                openai_error = OpenAIRateLimitError(f"API rate limit exceeded: {response.text}")
+            elif response.status_code == 401:
+                openai_error = OpenAIUnauthorizedError(f"API key is invalid: {response.text}")
+            else:
+                openai_error = OpenAIError(
+                    f"OpenAI returned an error.\n"
+                    f"Status code: {response.status_code}\n"
+                    f"Response body: {response.text}",
+                    status_code=response.status_code,
+                )
+            raise openai_error
+        if read_response:
+            return json_response
+        else:
+            return response
+
+    payload = {
+            "model": "gpt-3.5-turbo,
+            "messages": messages,
+            "max_tokens": 250,
+            "temperature": 0.7,
+            "top_p": 1,
+            "n": 1,
+        }
+    headers = {"Authorization": f"Bearer {os.environ('openai_apikey')}", "Content-Type": "application/json"}
+    url = "https://api.openai.com/v1/completions/chat"
+    res = openai_request(url=url, headers=headers, payload=payload)
+            _check_openai_finish_reason(result=res, payload=payload)
+            responses = [ans["text"].strip() for ans in res["choices"]]
+            return responses
+    ```
+}
+
+BuildSystem {
+    * The build system will read files with the ".su" extension within the specified source directory and transpile them into the specified target language
+    
+    constraint transpilation {
+        * To execute the transpilation, the build system will call the OpenAI API with these instructions to execute the transpilation
+        * The build system will then take the result of the transpilation and save them in the appropriate destination folder
+        * Every file will be transpiled to a file of the same name but with a different extension (.js for JavaScript, .py for Python, etc.)
+        * The prompt to the OpenAI API should contain the following details:
+            * The target language
+            * To only answer with the transpiled code and nothing else
+            * That it should make sure to follow the pseudocode's specifications
+    }
+
+    constraint interfaces {
+        * every time the "@interfaces X from Y" pattern is used in a .su file, the file specified in Y will be loaded, and the X interface will be extracted.
+        For example:
+
+        ```main.su
+        @interfaces Foo, Bar from "./interfaces.su"
+
+        ... some code ...
+        ```
+
+        ```interfaces.su
+        interface Foo {
+            name, label
+        }
+
+        interface Bar {
+            key, value
+        }
+
+        interface Baz {
+            myProperty
+        }
+        ```
+
+        will result in:
+
+        ```main.su
+         interface Bar {
+            key, value
+        }
+
+        interface Baz {
+            myProperty
+        }
+
+        ... some code ...
+        ```
+    }
+}
+
+BuildSystem(language=JavaScript, destination=/build)

@@ -1,0 +1,5 @@
+interface Route {
+    path: the URL path,
+    method: HTTP verb,
+    handler: the function that handles the route
+}
