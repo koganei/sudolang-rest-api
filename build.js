@@ -56,11 +56,7 @@ function extractInterfaces(sourcePath, destinationPath) {
         const interfaces = match[1].split(',').map(x => x.trim());
         const interfaceFilePath = path.join(path.dirname(sourcePath), match[2]);
         const interfaceFileContent = fs.readFileSync(interfaceFilePath, 'utf-8');
-        const replacedCode = sourceCode.replace(match[0], interfaces.map(interfaceName => {
-            const interfaceBlockRegex = new RegExp(`interface ${interfaceName} {([\\s\\w,]+)}`);
-            const interfaceMatch = interfaceBlockRegex.exec(interfaceFileContent);
-            return interfaceMatch ? interfaceMatch[0] : '';
-        }).join('\n'));
+        const replacedCode = sourceCode.replace(match[0], interfaceFileContent);
 
         return replacedCode;
     }
@@ -77,6 +73,7 @@ function buildSystem(sourceDir, destinationDir, targetLanguage) {
             const destinationPath = path.join(destinationDir, file);
 
             const sourceCode = extractInterfaces(sourcePath, destinationPath);
+            console.log(sourceCode);
             transpileFile(sourceCode,sourcePath,  destinationDir, targetExtension);
         }
     });

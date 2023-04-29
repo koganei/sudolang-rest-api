@@ -1,5 +1,5 @@
 """
-This file sets up an Express server and serves a set of routes
+This file sets up an HTTP server and serves a set of routes
 """
 
 @interfaces Routes from "./interfaces.su"

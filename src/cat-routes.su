@@ -4,16 +4,28 @@ This file exports a function getRoutes which will return a static array of route
 
 @interfaces Route from "./interfaces.su"
 
+interface Cat {
+    color, name, age, pictureURL
+}
+
 getRoutes(): Array of Routes {
+
+    cats file: "cats.json"
+
     [
         Route {
-            path: /black
-            returns the string "black"
+            path: /
+            will read from the cats file and return a JSON array of objects
         }
 
         Route {
-            path: /white
-            returns the string "white"
+            path: /add
+            will add a new cat to the cats file
+        }
+
+        Route {
+            path: /:cat
+            will return a single cat from the cats file
         }
     ]
 }
