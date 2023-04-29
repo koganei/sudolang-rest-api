@@ -21,6 +21,13 @@ getRoutes(): Array of Routes {
         Route {
             path: /add
             will add a new cat to the cats file
+            constraint only new cats {
+                * Please make sure that the cat is not already in the file
+            }
+
+            constraint matches interface {
+                * If the new cat does not follow the Cat interface exactly, return a format mismatch error
+            }
         }
 
         Route {

@@ -39,7 +39,7 @@ async function transpileFile(sourceCode, sourcePath, destinationPath, targetExte
         Please only output valid JavaScript code and nothing else. Refrain from adding comments, instructions or explanations.
 
         ${sourceCode}
-        
+
         Please generate the JavaScript code for the pseudocode above. Please only output valid JavaScript code and nothing else. Refrain from adding comments, instructions or explanations.`
     );
 
