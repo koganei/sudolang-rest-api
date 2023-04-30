@@ -12,11 +12,11 @@ At the moment, it works pretty well with `gpt-3.5-turbo`, but works very well wi
 
 # Features
 
-[x] Automatically build codebase in JavaScript based on SudoLang
-[x] Import interfaces using the `@interfaces` directive
-[] Automatically generate unit tests
-[] Use these unit tests for self-refinement to make sure that the generated code works as expected
-[] Automatically look up optimizations
-[] Automatically rewrite the SudoLang itself to be more deterministic
-[] Progressive compilation (only recompile code changes)
-[] Automatically produce documentation
+- [x] Automatically build codebase in JavaScript based on SudoLang
+- [x] Import interfaces using the `@interfaces` directive
+- [ ] Automatically generate unit tests
+- [ ] Use these unit tests for self-refinement to make sure that the generated code works as expected
+- [ ] Automatically look up optimizations
+- [ ] Automatically rewrite the SudoLang itself to be more deterministic
+- [ ] Progressive compilation (only recompile code changes)
+- [ ] Automatically produce documentation
